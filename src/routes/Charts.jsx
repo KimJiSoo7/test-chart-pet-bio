@@ -24,7 +24,8 @@ const Wrapper = styled.div`
 
 function Charts() {
   const [data, setData] = useState([]);
-  const { type } = useParams();
+  // web_server_URL: http://localhost:3000/charts/heart
+  const { type } = useParams(); // type: heart
 
   async function getHeartsRates() {
     try {

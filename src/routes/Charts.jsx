@@ -24,7 +24,7 @@ const Wrapper = styled.div`
 
 function Charts() {
   const [data, setData] = useState([]);
-  // web_server_URL: http://localhost:3000/charts/heart
+  // web_server_URL: http://localhost:8081/charts/heart
   const { type } = useParams(); // type: heart
 
   async function getHeartsRates() {
@@ -38,7 +38,7 @@ function Charts() {
       console.error(error);
     }
   }
-  // getHeartsRates(type, DEVICE_ID);
+  // getHeartsRates(type, DEVICE_ID)
 
   useEffect(() => {
     getHeartsRates();
@@ -90,7 +90,7 @@ function Charts() {
           <YAxis
             type="number"
             domain={[0, 200]}
-            tick={[0, 100, 200]}
+            ticks={[0, 100, 200]}
             interval={0}
           />
           <Tooltip />

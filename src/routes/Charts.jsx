@@ -13,9 +13,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useEffect, useState } from "react";
+import { DEVICE_ID } from "../global/deviceInfo";
 const axios = require("axios").default;
-
-const DEVICE_ID = "1234567890";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -24,24 +23,23 @@ const Wrapper = styled.div`
 
 function Charts() {
   const [data, setData] = useState([]);
-  // web_server_URL: http://localhost:8081/charts/heart
   const { type } = useParams(); // type: heart
 
   async function getHeartsRates() {
     try {
-      console.log(`${URL_WEB_SERVER}/${type}`);
-      const response = await axios.get(`${URL_WEB_SERVER}/${type}`, {
-        device_id: DEVICE_ID,
+      const response = await axios.get(`${URL_WEB_SERVER}/charts/${type}`, {
+        params: {
+          deviceId: DEVICE_ID,
+        },
       });
       setData(response.data[0]);
     } catch (error) {
       console.error(error);
     }
   }
-  // getHeartsRates(type, DEVICE_ID)
 
   useEffect(() => {
-    getHeartsRates();
+    getHeartsRates(type, setData);
   }, []);
 
   let tempArr = [];
@@ -67,11 +65,12 @@ function Charts() {
           height={300}
           data={tempArr}
           margin={{
-            top: 5,
+            top: 20,
             right: 30,
             left: 20,
             bottom: 5,
           }}
+          style={{ backgroundColor: "black" }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
@@ -95,9 +94,9 @@ function Charts() {
           />
           <Tooltip />
           <Legend />
-          <Bar xAxisId={0} dataKey="heartRates" fill="#cc1a4f" />
-          <Bar xAxisId={1} dataKey="abnormal_min_heartRates" fill="#82ca9d" />
-          <Bar xAxisId={2} dataKey="abnormal_max_heartRates" fill="#82ca9d" />
+          <Bar xAxisId={0} dataKey="heartRates" fill="#8d8484" />
+          <Bar xAxisId={1} dataKey="abnormal_min_heartRates" fill="#cc1a4f" />
+          <Bar xAxisId={2} dataKey="abnormal_max_heartRates" fill="#cc1a4f" />
         </BarChart>
       </ResponsiveContainer>
     </Wrapper>

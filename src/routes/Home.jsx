@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import src_heartRate from "../images/heart_rate.png";
 import src_heart from "../images/heart_orange.png";
 import src_breath from "../images/heart_green.png";
-import url_heartRates from "../images/heart_rate.png";
+import src_sun from "../images/sun.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { URL_WEB_SERVER } from "../global/url";
@@ -131,10 +132,8 @@ const RateBox = ({ imageUrl, title, value, unit, color, ftWeight }) => {
 };
 
 const Button = styled.button`
-  position: absolute;
-  right: 0;
-  width: 40px;
-  height: 40px;
+  width: ${(props) => props.width || "35px"};
+  height: ${(props) => props.height || "35px"};
   border-radius: 25px;
   font-size: 30px;
   font-weight: bold;
@@ -410,7 +409,7 @@ function Home() {
           }}
         >
           <NoticeBox>
-            <Img src={url_heartRates} />
+            <Img src={src_heartRate} />
             <Span color={"black"} ftWeight={"400"}>
               {notice.type}
             </Span>
@@ -439,21 +438,21 @@ function Home() {
 
       <CurrentStateWrapper>
         <CurrentStateBox>
-          <Img src={url_heartRates} />
+          <Img src={src_sun} />
           <Span color={"#93919d"} ftWeight={"400"}>
             {"체중"}
           </Span>
           <Span ftWeight={"400"}>{status?.weight}</Span>
         </CurrentStateBox>
         <CurrentStateBox>
-          <Img src={url_heartRates} />
+          <Img src={src_sun} />
           <Span color={"#93919d"} ftWeight={"400"}>
             {"환경온도"}
           </Span>
           <Span ftWeight={"400"}> {status?.temperature}</Span>
         </CurrentStateBox>
         <CurrentStateBox>
-          <Img src={url_heartRates} />
+          <Img src={src_sun} />
           <Span color={"#93919d"} ftWeight={"400"}>
             {"환경습도"}
           </Span>
@@ -566,6 +565,10 @@ function Home() {
         </div>
 
         <Button
+          style={{
+            position: "absolute",
+            right: 0,
+          }}
           onClick={() => {
             navigate("/charts/1");
           }}
@@ -596,6 +599,10 @@ function Home() {
         </div>
 
         <Button
+          style={{
+            position: "absolute",
+            right: 0,
+          }}
           onClick={() => {
             navigate("/charts/2");
           }}

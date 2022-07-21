@@ -30,7 +30,7 @@ function App() {
     <RecoilRoot>
       <Router>
         <GlobalStyle />
-        <Header title={""} />
+        <Header />
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/register" element={<Register />}></Route>

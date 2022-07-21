@@ -327,7 +327,7 @@ function Home() {
   function timerEveryTenSeconds() {
     return setInterval(() => {
       const time = new Date();
-      if (time.getSeconds().toString().padStart(2, "0").substring(1) === "0") {
+      if (time.getSeconds() % 10 === 0) {
         console.log("occur every 10 seconds", time);
         // 체중, 온도, 습도
         setCurrStatus();
@@ -363,7 +363,7 @@ function Home() {
     }, 1000);
   }
 
-  console.log("before rendering useEffect()");
+  console.log("rendered!!");
 
   useEffect(() => {
     try {
@@ -377,7 +377,6 @@ function Home() {
       setChartData("2", dates);
       setAbnormalNotice();
       setCurrStatus();
-
       // timer on
       intervalSec = timerEveryTenSeconds();
       intervalMin = timerEveryMinutes();
@@ -385,7 +384,6 @@ function Home() {
       // console.log("Active intervalSec >>  ", intervalSec);
       // console.log("Active intervalMin >>  ", intervalMin);
       // console.log("Active intervalDay >>  ", intervalDay);
-
       return () => {
         // console.log("component unmounted!!!");
         clearInterval(intervalSec);

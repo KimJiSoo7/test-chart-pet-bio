@@ -7,12 +7,11 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 80px;
-  background-color: ${(props) =>
-    props.path === "register" ? "white" : "black"};
 `;
 
 const Title = styled.span`
-  color: white;
+  color: #333333;
+  font-weight: bold;
   font-size: 30px;
 `;
 
@@ -20,10 +19,13 @@ const Button = styled.button`
   width: 60px;
   height: 50px;
   border: none;
-  background-color: ${(props) =>
-    props.path === "register" ? "black" : "white"};
-  color: ${(props) => (props.path === "register" ? "white" : "black")};
+  background-color: transparent;
+  color: #333333;
+  font-weight: bold;
   margin-left: 8px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const RightButton = styled(Button)`
@@ -51,10 +53,10 @@ function Header() {
       case "register":
         title = "";
         break;
-      case "charts/heart":
+      case "charts/1":
         title = "심박수";
         break;
-      case "charts/breath":
+      case "charts/2":
         title = "호흡수";
         break;
       case "notice":

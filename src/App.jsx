@@ -2,10 +2,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./common/Header";
 import Home from "./routes/Home";
 import Register from "./routes/Register";
-import NoticeAbnormalData from "./routes/NoticeAbnormalData";
+import Notice from "./routes/Notice";
 import Charts from "./routes/Charts";
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
+import { RecoilRoot } from "recoil";
 
 /**
  * <BrowserRouter> is the recommended interface for running React Router in a web browser.
@@ -19,23 +20,25 @@ const GlobalStyle = createGlobalStyle`
 ${reset}
 body{
   font-family: "Arial", "sans-serif";
-  color: #333333;
+  color: #474554;
     /* line-height: 1.5; */
   }
 `;
 
 function App() {
   return (
-    <Router>
-      <GlobalStyle />
-      <Header title={""} />
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/register" element={<Register />}></Route>
-        <Route path="/notice" element={<NoticeAbnormalData />}></Route>
-        <Route path="/charts/:type" element={<Charts />}></Route>
-      </Routes>
-    </Router>
+    <RecoilRoot>
+      <Router>
+        <GlobalStyle />
+        <Header title={""} />
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/register" element={<Register />}></Route>
+          <Route path="/notice" element={<Notice />}></Route>
+          <Route path="/charts/:gubun" element={<Charts />}></Route>
+        </Routes>
+      </Router>
+    </RecoilRoot>
   );
 }
 

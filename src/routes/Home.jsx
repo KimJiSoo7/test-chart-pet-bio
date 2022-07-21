@@ -183,6 +183,8 @@ function Home() {
     for (let i = 0; i < arr.length; i++) {
       timeDiff = now - new Date(`${yyyyMMdd} ${arr[i].updateDate}`);
       timeDiffByMinutes = Math.ceil(timeDiff / 1000 / 60);
+      // console.log("[getTicks] timeDiffByMinutes >>  ", timeDiffByMinutes);
+      // console.log("[getTicks] updateDate >>  ", arr[i].updateDate);
       switch (timeDiffByMinutes) {
         case 15:
           ticks.push(arr[i].updateDate);
@@ -194,6 +196,14 @@ function Home() {
           ticks.push(arr[i].updateDate);
           break;
       }
+      // timeDiffByMinutes = timeDiff / 1000 / 60;
+      // if (
+      //   (timeDiffByMinutes < 16 && timeDiffByMinutes > 14.9) ||
+      //   (timeDiffByMinutes < 11 && timeDiffByMinutes > 9.9) ||
+      //   (timeDiffByMinutes < 6 && timeDiffByMinutes > 4.9)
+      // ) {
+      //   ticks.push(arr[i].updateDate);
+      // }
     }
     // console.log("ticks >>   ", ticks);
     return ticks;
@@ -266,20 +276,18 @@ function Home() {
     }
   };
 
-  // 분단위 data가 15개(총 15분)씩 안 나오면 표시 문제 발생
   const fifteenMinutesFormatter = (dates) => {
     let tickText;
     const now = new Date();
     const yyyyMMdd = now.toISOString().substring(0, 10);
     const timeDiff = now - new Date(`${yyyyMMdd} ${dates}`);
     const timeDiffByMinutes = timeDiff / 1000 / 60; //Math.floor(timeDiff / 1000 / 60);
-    // console.log(now, " - ", `${yyyyMMdd} ${dates}`);
-    // console.log(timeDiff / 1000 / 60, " 분");
-    if (timeDiffByMinutes < 16 && timeDiffByMinutes > 14.9) {
+    // console.log("[formatter] timeDiffByMinutes >>  ", timeDiffByMinutes);
+    if (timeDiffByMinutes < 16.1 && timeDiffByMinutes > 14.9) {
       tickText = "15분";
-    } else if (timeDiffByMinutes < 11 && timeDiffByMinutes > 9.9) {
+    } else if (timeDiffByMinutes < 11.1 && timeDiffByMinutes > 9.9) {
       tickText = "10분";
-    } else if (timeDiffByMinutes < 6 && timeDiffByMinutes > 4.9) {
+    } else if (timeDiffByMinutes < 6.1 && timeDiffByMinutes > 4.9) {
       tickText = "5분";
     } else {
       tickText = ""; // undefined

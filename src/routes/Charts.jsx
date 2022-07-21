@@ -522,6 +522,8 @@ function Charts() {
       <ChartBox>
         <button
           onClick={() => {
+            setBarClicked(false);
+            setNoticeClicked(false);
             switch (tab) {
               case "D":
                 setDay((prev) => {
@@ -549,6 +551,8 @@ function Charts() {
         </button>
         <button
           onClick={() => {
+            setBarClicked(false);
+            setNoticeClicked(false);
             // 미래날짜는 조회 불가
             let tempDate = new Date(day);
             switch (tab) {

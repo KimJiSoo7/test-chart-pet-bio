@@ -19,8 +19,8 @@ import { Hr } from "../common/Common";
 // const axios = require("axios").default;
 
 const Wrapper = styled.div`
-  width: 100%;
-  height: 110vh;
+  /* width: 100%; */
+  /* height: 110vh; */
   background-color: #474554;
 `;
 
@@ -91,7 +91,6 @@ const Span = styled.span`
   font-size: ${(props) => props.ftSize || "20px"};
   color: ${(props) => props.ftColor || "#a3a2aa"};
   font-weight: ${(props) => props.ftWeight || "normal"};
-  /* font-weight: bold; */
 `;
 
 const Img = styled.img.attrs({ alt: `can't find a image` })`

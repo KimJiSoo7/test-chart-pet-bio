@@ -42,9 +42,11 @@ const NoticeBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 230px;
+  /* width: 230px; */
   height: 100%;
   column-gap: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
 `;
 
 const CurrentStateWrapper = styled.div`
@@ -87,9 +89,7 @@ const Box = styled.div`
 `;
 
 const Span = styled.span`
-  /* display: inline-block; */
   font-size: ${(props) => props.fontSize || "20px"};
-  width: ${(props) => props.width};
   color: ${(props) => props.color || "white"};
   font-weight: ${(props) => props.ftWeight || "bold"};
 `;

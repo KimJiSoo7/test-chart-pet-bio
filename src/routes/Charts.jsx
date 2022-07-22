@@ -110,12 +110,13 @@ function Charts() {
   }); // when bar is clicked
   const [chart, setChart] = useState([]); // bar chart data
   const [cntAbnormal, setCntAbnormal] = useState(0); // abnormal data count
-  const [day, setDay] = useState(new Date()); // swipe variable for day before and next
-  const [barClicked, setBarClicked] = useState(false);
-  let isBarClicked = false; // barClicked는 state기 때문에 바로바로 변화가 안돼서 click event에서 사용힘듬
+  const [day, setDay] = useState(new Date()); // swipe variable, unit: period(a day, a week, a month)
   const [noticeClicked, setNoticeClicked] = useState(false); // notice box clicked
   const [hasAbnormal, setHasAbonormal] = useState(false); // the clicked bar's abnormal data when notice box is clicked
+  const [barClicked, setBarClicked] = useState(false);
+  let isBarClicked = false; // barClicked는 state기 때문에 바로바로 변화가 안돼서 click event에서 사용힘듬
   const { gubun } = useParams(); // 1: heart 2: breath
+
   // 왜 지역변수로는 동작을 안 하는지..? parameter넘길 때 빈값으로 넘어감
   // let xTicks = [];
   const [xTicks, setXTicks] = useState([]);
@@ -184,49 +185,72 @@ function Charts() {
 
   const dayFormatter = (dates) => {
     const hours = `${dates}`.substring(0, 2);
+    let tickText = "";
     switch (hours) {
       case "00":
-        return "0시";
+        tickText = "0시";
+        break;
       case "06":
-        return "6시";
+        tickText = "6시";
+        break;
       case "12":
-        return "12시";
+        tickText = "12시";
+        break;
       case "18":
-        return "18시";
-      default:
-        return "";
+        tickText = "18시";
+        break;
     }
+    return tickText;
   };
 
   const weekFormatter = (dates) => {
-    switch (new Date(dates).getDay()) {
-      case 0:
-        return "일";
-      case 1:
-        return "월";
-      case 2:
-        return "화";
-      case 3:
-        return "수";
-      case 4:
-        return "목";
-      case 5:
-        return "금";
-      case 6:
-        return "토";
-      default: // datetime is null, can't cast into Date()
-        return "";
-    }
+    // switch statement will be changed into lookUpTable by compiler, maybe...?
+    const key = new Date(dates).getDay();
+    // let tickText = "";
+    // switch (key) {
+    //   case 0:
+    //     tickText = "일";
+    //     break;
+    //   case 1:
+    //     tickText = "월";
+    //     break;
+    //   case 2:
+    //     tickText = "화";
+    //     break;
+    //   case 3:
+    //     tickText = "수";
+    //     break;
+    //   case 4:
+    //     tickText = "목";
+    //     break;
+    //   case 5:
+    //     tickText = "금";
+    //     break;
+    //   case 6:
+    //     tickText = "토";
+    //     break;
+    // }
+    // return tickText;
+
+    const lookUpTable = {
+      0: "일",
+      1: "월",
+      2: "화",
+      3: "수",
+      4: "목",
+      5: "금",
+      6: "토",
+    };
+    return lookUpTable[key];
   };
 
   const monthFormatter = (dates) => {
     const date = new Date(dates);
-    switch (date.getDay()) {
-      case 0:
-        return date.getDate() + "일";
-      default:
-        return "";
+    let tickText = "";
+    if (!date.getDay()) {
+      tickText = date.getDate() + "일";
     }
+    return tickText;
   };
 
   const setChartData = (gubun, arrItem, minVal, maxVal, abnormal) => {

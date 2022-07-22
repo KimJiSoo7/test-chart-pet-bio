@@ -79,7 +79,7 @@ const AverageMeasureWrapper = styled.div`
   height: 100px;
   position: relative;
   margin: 0 auto;
-  margin-top: 20px;
+  margin-top: 10px;
 `;
 
 const Box = styled.div`

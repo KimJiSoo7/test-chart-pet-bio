@@ -46,18 +46,27 @@ const Span = styled.span`
 
 const Item = ({ day, time, bpm }) => {
   return (
-    <ItemBox>
-      <div style={{ display: "flex", flexDirection: "column", rowGap: "10px" }}>
-        <Span>{day}</Span>
-        <Span color="white">{time}</Span>
-      </div>
-      <div style={{ display: "flex", alignItems: "center", columnGap: "8px" }}>
-        <Span ftSize="28px" color="white">
-          {bpm}
-        </Span>
-        <Span>BPM</Span>
-      </div>
-    </ItemBox>
+    <>
+      <ItemBox>
+        <div
+          key={day.concat(time)}
+          style={{ display: "flex", flexDirection: "column", rowGap: "10px" }}
+        >
+          <Span>{day}</Span>
+          <Span color="white">{time}</Span>
+        </div>
+        <div
+          key={day.concat(time, bpm)}
+          style={{ display: "flex", alignItems: "center", columnGap: "8px" }}
+        >
+          <Span ftSize="28px" color="white">
+            {bpm}
+          </Span>
+          <Span>BPM</Span>
+        </div>
+      </ItemBox>
+      <Hr />
+    </>
   );
 };
 
@@ -115,16 +124,12 @@ function Notice() {
       <ItemWrapper>
         {abnormalHeart?.map((item) => {
           return (
-            <>
-              <Item
-                key={item.update_date}
-                // key={item.update_date}
-                day={item.update_date.substring(0, 12)}
-                time={item.update_date.substring(13)}
-                bpm={item.bpm}
-              />
-              <Hr height="2px" />
-            </>
+            <Item
+              key={item.date}
+              day={item.date.substring(0, 12)}
+              time={item.date.substring(13)}
+              bpm={item.bpm}
+            />
           );
         })}
       </ItemWrapper>
@@ -139,15 +144,12 @@ function Notice() {
       <ItemWrapper>
         {abnormalBreath?.map((item) => {
           return (
-            <>
-              <Item
-                key={item.update_date}
-                day={item.update_date.substring(0, 12)}
-                time={item.update_date.substring(13)}
-                bpm={item.rr}
-              />
-              <Hr height="2px" />
-            </>
+            <Item
+              key={item.date}
+              day={item.date.substring(0, 12)}
+              time={item.date.substring(13)}
+              bpm={item.rr}
+            />
           );
         })}
       </ItemWrapper>

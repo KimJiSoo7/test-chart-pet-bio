@@ -175,37 +175,41 @@ function Home() {
   const getTicks = (arr, time) => {
     let ticks = [];
 
-    const now = new Date(time);
-    const yyyyMMdd = now.toISOString().substring(0, 10);
-    let timeDiff = 0;
-    let timeDiffByMinutes = 0;
-
-    for (let i = 0; i < arr.length; i++) {
-      timeDiff = now - new Date(`${yyyyMMdd} ${arr[i].updateDate}`);
-      timeDiffByMinutes = Math.ceil(timeDiff / 1000 / 60);
-      // console.log("[getTicks] timeDiffByMinutes >>  ", timeDiffByMinutes);
-      // console.log("[getTicks] updateDate >>  ", arr[i].updateDate);
-      switch (timeDiffByMinutes) {
-        case 15:
-          ticks.push(arr[i].updateDate);
-          break;
-        case 10:
-          ticks.push(arr[i].updateDate);
-          break;
-        case 5:
-          ticks.push(arr[i].updateDate);
-          break;
-      }
-      // timeDiffByMinutes = timeDiff / 1000 / 60;
-      // if (
-      //   (timeDiffByMinutes < 16 && timeDiffByMinutes > 14.9) ||
-      //   (timeDiffByMinutes < 11 && timeDiffByMinutes > 9.9) ||
-      //   (timeDiffByMinutes < 6 && timeDiffByMinutes > 4.9)
-      // ) {
-      //   ticks.push(arr[i].updateDate);
-      // }
+    if (arr.length >= 15) {
+      ticks = [arr[10].updateDate, arr[5].updateDate, arr[0].updateDate];
+    } else if (arr.lenght >= 10) {
+      ticks = [arr[5].updateDate, arr[0].updateDate];
+    } else if (arr.length >= 5) {
+      ticks = [arr[0].updateDate];
     }
-    // console.log("ticks >>   ", ticks);
+
+    // const now = new Date(time);
+    // const yyyyMMdd = now.toISOString().substring(0, 10);
+    // let timeDiff = 0;
+    // let timeDiffByMinutes = 0;
+
+    // for (let i = 0; i < arr.length; i++) {
+    //   timeDiff = now - new Date(`${yyyyMMdd} ${arr[i].updateDate}`);
+    //   timeDiffByMinutes = Math.ceil(timeDiff / 1000 / 60);
+    //   // console.log("[getTicks] timeDiffByMinutes >>  ", timeDiffByMinutes);
+    //   // console.log("[getTicks] updateDate >>  ", arr[i].updateDate);
+    //   // console.log("index:  ", i);
+    //   // console.log("timeDiffByMinutes:  ", timeDiffByMinutes);
+
+    //   switch (timeDiffByMinutes) {
+    //     case 15:
+    //       ticks.push(arr[i].updateDate);
+    //       break;
+    //     case 10:
+    //       ticks.push(arr[i].updateDate);
+    //       break;
+    //     case 5:
+    //       ticks.push(arr[i].updateDate);
+    //       break;
+    //   }
+    // }
+
+    // console.log(ticks);
     return ticks;
   };
 

@@ -147,6 +147,7 @@ const Button = styled.button`
 `;
 
 function Home() {
+  let count = 0;
   // react-query 사용여부?
   let intervalSec;
   let intervalMin;
@@ -166,37 +167,22 @@ function Home() {
   const [chartBPM, setChartBPM] = useState([]);
   const [chartRR, setChartRR] = useState([]);
 
-  // 하루전 일 평균 심박수 및 호흡수
+  // 하루 전 부터 현재까지 일 평균 심박수 및 호흡수
   const [dayBPM, setDayBPM] = useState(0);
   const [dayRR, setDayRR] = useState(0);
 
   const [xTicks, setXTicks] = useState([]);
 
-  const getTicks = (arr, time) => {
+  const getTicks = (arr) => {
     let ticks = [];
 
-    if (arr.length >= 15) {
-      ticks = [arr[10].updateDate, arr[5].updateDate, arr[0].updateDate];
-    } else if (arr.lenght >= 10) {
-      ticks = [arr[5].updateDate, arr[0].updateDate];
-    } else if (arr.length >= 5) {
-      ticks = [arr[0].updateDate];
+    for (let item of arr) {
+      if (item.timeDiff % 5 === 0) {
+        ticks.push(item.updateDate);
+      }
     }
-
-    // const now = new Date(time);
-    // const yyyyMMdd = now.toISOString().substring(0, 10);
-    // let timeDiff = 0;
-    // let timeDiffByMinutes = 0;
-
     // for (let i = 0; i < arr.length; i++) {
-    //   timeDiff = now - new Date(`${yyyyMMdd} ${arr[i].updateDate}`);
-    //   timeDiffByMinutes = Math.ceil(timeDiff / 1000 / 60);
-    //   // console.log("[getTicks] timeDiffByMinutes >>  ", timeDiffByMinutes);
-    //   // console.log("[getTicks] updateDate >>  ", arr[i].updateDate);
-    //   // console.log("index:  ", i);
-    //   // console.log("timeDiffByMinutes:  ", timeDiffByMinutes);
-
-    //   switch (timeDiffByMinutes) {
+    //   switch (arr[i].timeDiff) {
     //     case 15:
     //       ticks.push(arr[i].updateDate);
     //       break;
@@ -248,16 +234,11 @@ function Home() {
   };
 
   // 1: heart 2: breath
-  const setAvgData = async (gubun, value, time, isDay) => {
+  const setAvgData = async (gubun, value, isDay) => {
     const response = await axios.get(`${URL_WEB_SERVER}/home/avg-data`, {
       params: {
-        deviceId: DEVICE_ID,
         gb: gubun,
-        // format: 2022-07-08 13:15:00
-        time: time
-          .toISOString(0, 10)
-          .substring(0, 10)
-          .concat(" ", time.toTimeString().substring(0, 6), "00"),
+        deviceId: DEVICE_ID,
         value: value, // MINUTES 단위
       },
     });
@@ -281,17 +262,19 @@ function Home() {
   };
 
   const fifteenMinutesFormatter = (dates) => {
+    console.log("count >>   ", count++);
+    // 왜 10초마다 발생?
     let tickText;
     const now = new Date();
     const yyyyMMdd = now.toISOString().substring(0, 10);
     const timeDiff = now - new Date(`${yyyyMMdd} ${dates}`);
     const timeDiffByMinutes = timeDiff / 1000 / 60; //Math.floor(timeDiff / 1000 / 60);
-    // console.log("[formatter] timeDiffByMinutes >>  ", timeDiffByMinutes);
-    if (timeDiffByMinutes < 16.1 && timeDiffByMinutes > 14.9) {
+    console.log("[formatter] timeDiffByMinutes >>  ", timeDiffByMinutes);
+    if (timeDiffByMinutes < 16 && timeDiffByMinutes > 14) {
       tickText = "15분";
-    } else if (timeDiffByMinutes < 11.1 && timeDiffByMinutes > 9.9) {
+    } else if (timeDiffByMinutes < 11 && timeDiffByMinutes > 9) {
       tickText = "10분";
-    } else if (timeDiffByMinutes < 6.1 && timeDiffByMinutes > 4.9) {
+    } else if (timeDiffByMinutes < 6 && timeDiffByMinutes > 4) {
       tickText = "5분";
     } else {
       tickText = ""; // undefined
@@ -300,18 +283,18 @@ function Home() {
   };
 
   // 1: heart 2: breath
-  const setChartData = async (gubun, time) => {
+  const setChartData = async (gubun) => {
     console.log("setChartDate is called!!!");
     // format: 2022-07-08 13:15:00
-    const formattedTime = time
-      .toISOString(0, 10)
-      .substring(0, 10)
-      .concat(" ", time.toTimeString().substring(0, 6), "00");
+    // const formattedTime = time
+    //   .toISOString(0, 10)
+    //   .substring(0, 10)
+    //   .concat(" ", time.toTimeString().substring(0, 6), "00");
     const response = await axios.get(`${URL_WEB_SERVER}/home/chart-data`, {
       params: {
         deviceId: DEVICE_ID,
         gb: gubun,
-        time: formattedTime,
+        // time: formattedTime,
       },
     });
     const data = response.data[0];
@@ -322,6 +305,7 @@ function Home() {
         chartArr.push({
           measures: [item.minVal, item.maxVal],
           updateDate: item.update_date,
+          timeDiff: item.diff,
         });
       });
       if (gubun === "1") {
@@ -330,7 +314,7 @@ function Home() {
         setChartRR([...chartArr]);
       }
       // console.log("Call getTicks()!!");
-      setXTicks([...getTicks(chartArr, formattedTime)]);
+      setXTicks([...getTicks(chartArr)]);
     }
   };
 
@@ -355,10 +339,10 @@ function Home() {
       if (time.getSeconds() === 0) {
         console.log("occur every 1 minutes", time);
         // 전일자 데이터(분당 평균 호흡수 및 심박수)
-        setAvgData("1", 1, time, false);
-        setAvgData("2", 1, time, false);
-        setChartData("1", time);
-        setChartData("2", time);
+        setAvgData("1", 1, false);
+        setAvgData("2", 1, false);
+        setChartData("1");
+        setChartData("2");
       }
     }, 1000);
   }
@@ -368,8 +352,8 @@ function Home() {
     return setInterval(() => {
       const time = new Date();
       if (time.getSeconds() === 0 && time.getHours() === 0) {
-        setAvgData("1", 1 * 60 * 24, time, true);
-        setAvgData("2", 1 * 60 * 24, time, true);
+        setAvgData("1", 1 * 60 * 24, true);
+        setAvgData("2", 1 * 60 * 24, true);
       }
     }, 1000);
   }
@@ -380,12 +364,12 @@ function Home() {
     try {
       // initialize
       const dates = new Date();
-      setAvgData("1", 1, dates, false);
-      setAvgData("2", 1, dates, false);
-      setAvgData("1", 60 * 24, dates, true);
-      setAvgData("2", 60 * 24, dates, true);
-      setChartData("1", dates);
-      setChartData("2", dates);
+      setAvgData("1", 1, false);
+      setAvgData("2", 1, false);
+      setAvgData("1", 60 * 24, true);
+      setAvgData("2", 60 * 24, true);
+      setChartData("1");
+      setChartData("2");
       setAbnormalNotice();
       setCurrStatus();
       // timer on
